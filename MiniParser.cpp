@@ -62,6 +62,9 @@ void MiniParser::start(char currentChar) {
         state = OpenTag;
         return;
     }
+    else {
+        //throw xml exception here
+    }
 }
 
 void MiniParser::openTag(char currentChar) {
