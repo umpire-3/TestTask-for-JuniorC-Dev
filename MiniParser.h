@@ -7,11 +7,9 @@
 
 
 #include <fstream>
-#include <mutex>
 #include <stack>
-#include <map>
 #include <vector>
-#include "interval.h"
+#include <functional>
 
 class MiniParser {
     enum State {
