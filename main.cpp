@@ -1,10 +1,7 @@
-#include <iostream>
-#include <fstream>
 #include <thread>
-#include <mutex>
 #include <vector>
-#include "MiniParser.h"
 #include "interval.h"
+#include "MiniParser.h"
 #include "XmlWriter.h"
 
 XmlWriter xmlWriter;
