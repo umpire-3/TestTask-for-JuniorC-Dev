@@ -6,6 +6,9 @@
 
 XmlWriter xmlWriter;
 
+//Here can be implemented any prime numbers genereting algorithm
+//I know that this is not the fastest one
+//I was more focused on xml parsing and can rewrite this part later
 bool isPrime(int n) {
     for (int i = 2; i <= n/2; i++) {
         if (n%i == 0) return false;
