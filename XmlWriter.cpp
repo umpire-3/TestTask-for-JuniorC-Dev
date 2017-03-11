@@ -2,6 +2,7 @@
 // Created by umpire on 11.03.17.
 //
 
+#include <fstream>
 #include "XmlWriter.h"
 
 
