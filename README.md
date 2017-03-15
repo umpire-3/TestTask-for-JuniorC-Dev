@@ -1,12 +1,13 @@
 # TestTask-for-JuniorC-Dev
 
-Without unit tests yet.
-
 How to run on Ubuntu:
 
-g++ -pthread -o junTaskBin XmlWriter.cpp MiniParser.cpp main.cpp -std=c++11
-
-./bin
+* mkdir ${YOUR_BUILD_DIRECTORY}, where YOUR_BUILD_DIRECTORY - any directory to store binaries
+* cd ${YOUR_BUILD_DIRECTORY}
+* cmake ${SOURCE_DIR}, where ${SOURCE_DIR} - directory with sources from this repository
+* make
+* at this step you must create data.xml file
+* now you have to binaries: ./JunTestTask and ./Tests
 
 
 Task:
