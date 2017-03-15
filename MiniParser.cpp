@@ -102,7 +102,7 @@ void MiniParser::value(char currentChar) {
 void MiniParser::closeTag(char currentChar) {
     if (currentChar == '>') {
         if (currentTag != tags.top()) {
-            throw XmlException("Closing tag name doesn't match the previous opening tag named - " + tags.top());
+            throw XmlException("Closing tag name doesn't match the previous opening tag named \"" + tags.top() + '"');
         }
         else {
             tags.pop();
