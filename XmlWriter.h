@@ -16,7 +16,7 @@ class XmlWriter {
     std::mutex mutex;
     std::vector<char> buffer;
     std::vector<char>::iterator pos;
-    long posPointer;
+    long posPointer = 0;
 
 public:
 
