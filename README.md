@@ -7,7 +7,7 @@ How to run on Ubuntu:
 * cmake source_dir, where source_dir - directory with sources from this repository
 * make
 * at this step you must create data.xml file
-* now you have to binaries: ./JunTestTask and ./Tests
+* now you have two binaries: ./JunTestTask and ./Tests
 
 
 Task:
