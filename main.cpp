@@ -26,7 +26,7 @@ void genPrimes(Interval interval) {
 int main(int argc, char **argv) {
     MiniParser xmlParser;
 
-    xmlParser.onTagStart([&] (std::string tagName, long pos) {
+    xmlParser.onTagStart([] (std::string tagName, long pos) {
         if (tagName == "primes") {
             xmlWriter.setOutputPos(pos);
         }
