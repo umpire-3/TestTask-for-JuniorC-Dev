@@ -10,6 +10,7 @@
 TEST(MiniParser, testVerifyTagFunction) {
     std::string legalTagName = "_1ce2",
         illegalTagName = "23fs4/*fsdf";
+    
     ASSERT_TRUE(verifyTag(legalTagName));
     ASSERT_FALSE(verifyTag(illegalTagName));
 }
@@ -34,7 +35,7 @@ TEST(MiniParser, xmlStructure) {
     MiniParser parser;
 
     parser.onTagValue([](std::string tagName, std::string tagValue, std::stack<std::string> tags) {
-        if(tagName == "low" || tagName == "high") {
+        if (tagName == "low" || tagName == "high") {
             std::stack<std::string> expected_tags;
             expected_tags.push("root");
             expected_tags.push("intervals");
@@ -53,10 +54,13 @@ TEST(MiniParser, xmlStructure) {
 
 TEST(XmlWriter, save) {
     XmlWriter xmlWriter;
-    std::string test_string = "testing xml writer output to file";
+
+    std::string test_string = "testing xml writer output to file",
+            actual_string = "";
+
     xmlWriter.setBuffer(std::vector<char>(test_string.begin(), test_string.end()));
     xmlWriter.save("test_data.txt");
-    std::string actual_string = "";
+
     {
         std::ifstream in("test_data.txt");
         char c;
@@ -64,6 +68,7 @@ TEST(XmlWriter, save) {
             actual_string += c;
         }
     }
+
     ASSERT_EQ(test_string, actual_string);
 }
 
