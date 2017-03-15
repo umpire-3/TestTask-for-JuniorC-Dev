@@ -3,6 +3,7 @@
 //
 
 #include "MiniParser.h"
+#include "XmlException.h"
 
 MiniParser::MiniParser():
     state(Start),
@@ -30,14 +31,15 @@ bool verifyTag(std::string tag) {
     return true;
 }
 
-void MiniParser::parse(const char *file) {
-    in.open(file);
-    in.seekg(0, std::ios::end);
-    buffer.reserve(in.tellg());
-    in.seekg(0);
-    while (!in.eof()) {
-        char currentChar;
-        in.read(&currentChar, 1);
+void MiniParser::parse(const char *filename) {
+    file.open(filename);
+
+    file.seekg(0, std::ios::end);
+    buffer.reserve(file.tellg());
+    file.seekg(0);
+
+    char currentChar;
+    while (file.get(currentChar)) {
         switch (state) {
             case Start:
                 start(currentChar);
@@ -54,16 +56,14 @@ void MiniParser::parse(const char *file) {
         }
         buffer.push_back(currentChar);
     }
-    in.close();
+
+    file.close();
 }
 
 void MiniParser::start(char currentChar) {
     if (currentChar == '<') {
         state = OpenTag;
         return;
-    }
-    else {
-        //throw xml exception here
     }
 }
 
@@ -75,12 +75,12 @@ void MiniParser::openTag(char currentChar) {
     if (currentChar == '>') {
         if (verifyTag(currentTag)) {
             tags.push(currentTag);
-            handleTagStart(currentTag, in.tellg());
+            handleTagStart(currentTag, file.tellg());
             currentValue = "";
             state = Value;
         }
         else {
-            //throw xml exception here
+            throw XmlException("Invalid tag name at " + std::to_string(file.tellg()) + " char in file");
         }
         return;
     }
@@ -99,13 +99,13 @@ void MiniParser::value(char currentChar) {
 void MiniParser::closeTag(char currentChar) {
     if (currentChar == '>') {
         if (currentTag != tags.top()) {
-            //throw xml exception here
+            throw XmlException("Closing tag name doesn't match the previous opening tag named - " + tags.top());
         }
         else {
+            tags.pop();
             handleTagValue(currentTag, currentValue, tags);
             currentValue = "";
             state = Value;
-            tags.pop();
         }
         return;
     }

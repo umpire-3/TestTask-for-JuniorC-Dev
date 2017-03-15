@@ -12,6 +12,9 @@
 #include <functional>
 
 class MiniParser {
+    friend class MiniParser_xmlStructure_Test;
+    friend class MiniParser_states_Test;
+
     enum State {
         Start,
         OpenTag,
@@ -22,7 +25,7 @@ class MiniParser {
     std::string currentTag, currentValue;
     std::stack<std::string> tags;
 
-    std::ifstream in;
+    std::ifstream file;
     std::vector<char> buffer;
 
     std::function<void(std::string, long)> handleTagStart;
@@ -44,5 +47,6 @@ public:
     const std::vector<char> &getBuffer() const;
 };
 
+bool verifyTag(std::string);
 
 #endif //JUNTESTTASK_MINIPARSER_H

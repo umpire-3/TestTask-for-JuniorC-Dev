@@ -6,8 +6,11 @@
 #include "XmlWriter.h"
 
 
-void XmlWriter::setOutputPos(long pos) {
+void XmlWriter:: setOutputPos(long pos) {
     posPointer = pos;
+    if (buffer.size() > 0) {
+        this->pos = buffer.begin() + pos;
+    }
 }
 
 void XmlWriter::setBuffer(const std::vector<char> &buffer) {
@@ -23,5 +26,5 @@ void XmlWriter::write(int val) {
 
 void XmlWriter::save(const char *file) {
     std::ofstream out(file);
-    out.write(buffer.begin().base(), buffer.size() - 1);
+    out.write(&buffer.front(), buffer.size());
 }

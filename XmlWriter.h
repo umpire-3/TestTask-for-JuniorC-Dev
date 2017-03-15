@@ -10,6 +10,9 @@
 #include <vector>
 
 class XmlWriter {
+    friend class XmlWriter_write_Test;
+    friend class XmlWriter_save_Test;
+
     std::mutex mutex;
     std::vector<char> buffer;
     std::vector<char>::iterator pos;

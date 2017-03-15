@@ -1,14 +1,13 @@
 #include <thread>
 #include <vector>
+#include <iostream>
 #include "interval.h"
 #include "MiniParser.h"
 #include "XmlWriter.h"
+#include "XmlException.h"
 
 XmlWriter xmlWriter;
 
-//Here can be implemented any prime numbers genereting algorithm
-//I know that this is not the fastest one
-//I was more focused on xml parsing and can rewrite this part later
 bool isPrime(int n) {
     for (int i = 2; i <= n/2; i++) {
         if (n%i == 0) return false;
@@ -24,7 +23,7 @@ void genPrimes(Interval interval) {
     }
 }
 
-int main() {
+int main(int argc, char **argv) {
     MiniParser xmlParser;
 
     xmlParser.onTagStart([&] (std::string tagName, long pos) {
@@ -36,29 +35,43 @@ int main() {
     int low;
     std::vector<Interval> intervals;
     xmlParser.onTagValue([&] (std::string tagName, std::string tagValue, std::stack<std::string> tags) {
-        if (tagName == "low") {
-            low = std::stoi(tagValue);
-        }
-        else if (tagName == "high") {
-            int high = std::stoi(tagValue);
-            intervals.push_back(Interval{low, high});
+        if (!tags.empty() && tags.top() == "interval") {
+            tags.pop();
+            if (!tags.empty() && tags.top() == "intervals") {
+                tags.pop();
+                if (!tags.empty() && tags.top() == "root") {
+                    if (tagName == "low") {
+                        low = std::stoi(tagValue);
+                    }
+                    else if (tagName == "high") {
+                        int high = std::stoi(tagValue);
+                        intervals.push_back(Interval{low, high});
+                    }
+                }
+            }
         }
     });
 
-    xmlParser.parse("data.xml");
+    try {
+        xmlParser.parse("data.xml");
 
-    xmlWriter.setBuffer(xmlParser.getBuffer());
+        xmlWriter.setBuffer(xmlParser.getBuffer());
 
-    std::vector<std::thread> threads;
-    for (auto &interval : intervals) {
-        threads.push_back(std::thread(genPrimes, interval));
+        std::vector<std::thread> threads;
+        for (auto &interval : intervals) {
+            threads.push_back(std::thread(genPrimes, interval));
+        }
+
+        for (auto &thread : threads) {
+            thread.join();
+        }
+
+        xmlWriter.save("data.xml");
+
     }
-
-    for (auto &thread : threads) {
-        thread.join();
+    catch (XmlException e) {
+        std::cout << e.getMessage() << "\n";
     }
-
-    xmlWriter.save("data.xml");
 
     return 0;
 }
