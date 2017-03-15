@@ -6,16 +6,17 @@
 #include <fstream>
 #include "../XmlWriter.h"
 #include "../MiniParser.h"
+#include "../XmlException.h"
 
 TEST(MiniParser, testVerifyTagFunction) {
     std::string legalTagName = "_1ce2",
-        illegalTagName = "23fs4/*fsdf";
-    
+            illegalTagName = "23fs4/*fsdf";
+
     ASSERT_TRUE(verifyTag(legalTagName));
     ASSERT_FALSE(verifyTag(illegalTagName));
 }
 
-TEST(MiniParser, states) {
+TEST(MiniParser, callbacks) {
     MiniParser parser;
 
     parser.onTagStart([&](std::string tagName, long pos) {
@@ -29,6 +30,28 @@ TEST(MiniParser, states) {
     ASSERT_EQ(parser.state, MiniParser::Start);
 
     parser.parse("data.xml");
+}
+
+TEST(MiniParser, states) {
+    MiniParser parser;
+
+    ASSERT_THROW(parser.start('_'), XmlException);
+    parser.start('<');
+    ASSERT_EQ(parser.state, MiniParser::OpenTag);
+    ASSERT_THROW(parser.openTag('>'), XmlException);
+    parser.openTag('t');
+    ASSERT_EQ(parser.state, MiniParser::OpenTag);
+    parser.openTag('>');
+    ASSERT_EQ(parser.state, MiniParser::Value);
+    parser.value('<');
+    ASSERT_EQ(parser.state, MiniParser::OpenTag);
+    parser.openTag('/');
+    ASSERT_EQ(parser.state, MiniParser::CloseTag);
+    ASSERT_THROW(parser.closeTag('>'), XmlException);
+    parser.closeTag('t');
+    ASSERT_EQ(parser.state, MiniParser::CloseTag);
+    parser.closeTag('>');
+    ASSERT_EQ(parser.state, MiniParser::Value);
 }
 
 TEST(MiniParser, xmlStructure) {
@@ -77,7 +100,7 @@ TEST(XmlWriter, write) {
 
     int expected_ints[3] = { 23, 5, 2356 };
     std::string expected_buffer = "<primes></primes>",
-        actual_buffer = expected_buffer;
+            actual_buffer = expected_buffer;
     unsigned long pos = expected_buffer.find("><") + 1;
 
     for (int i = 2; i >= 0; i--) {

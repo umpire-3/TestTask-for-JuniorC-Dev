@@ -13,6 +13,7 @@
 
 class MiniParser {
     friend class MiniParser_xmlStructure_Test;
+    friend class MiniParser_callbacks_Test;
     friend class MiniParser_states_Test;
 
     enum State {
