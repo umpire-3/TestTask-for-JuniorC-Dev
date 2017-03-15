@@ -65,6 +65,9 @@ void MiniParser::start(char currentChar) {
         state = OpenTag;
         return;
     }
+    else {
+        throw XmlException("Invalid xml structure");
+    }
 }
 
 void MiniParser::openTag(char currentChar) {
