@@ -7,8 +7,8 @@ set(SOURCE_FILES MiniParser.cpp MiniParser.h interval.h XmlWriter.cpp XmlWriter.
 add_executable(JunTestTask ${SOURCE_FILES} main.cpp)
 target_link_libraries(JunTestTask pthread)
 
-include_directories(${CMAKE_SOURCE_DIR}/GoogleMock/include)
-link_directories(${CMAKE_SOURCE_DIR}/GoogleMock/lib)
+include_directories(GoogleMock/include)
+link_directories(GoogleMock/lib)
 
 add_executable(Tests ${SOURCE_FILES} Tests/tests_main.cpp)
 target_link_libraries(Tests libgtest.a pthread)
