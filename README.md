@@ -2,9 +2,9 @@
 
 How to run on Ubuntu:
 
-* mkdir build_dir, where build_dir - any directory to store binaries
-* cd build_dir
-* cmake source_dir, where source_dir - directory with sources from this repository
+* mkdir <build_dir>, where <build_dir> - any directory to store binaries
+* cd <build_dir>
+* cmake <source_dir>, where <source_dir> - directory with sources from this repository
 * make
 * at this step you must create data.xml file
 * now you have two binaries: ./JunTestTask and ./Tests
